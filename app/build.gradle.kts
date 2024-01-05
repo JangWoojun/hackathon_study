@@ -1,13 +1,24 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
 }
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.inputStream().use { localProperties.load(it) }
+}
+
+val APP_KEY = localProperties.getProperty("APP_KEY") ?: ""
 
 android {
     namespace = "com.woojun.hackathonstudy"
     compileSdk = 34
 
     defaultConfig {
+        resValue("string", "APP_KEY", APP_KEY)
+
         applicationId = "com.woojun.hackathonstudy"
         minSdk = 29
         targetSdk = 34

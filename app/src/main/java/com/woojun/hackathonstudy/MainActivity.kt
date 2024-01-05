@@ -1,5 +1,6 @@
 package com.woojun.hackathonstudy
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.woojun.hackathonstudy.databinding.ActivityMainBinding
@@ -12,7 +13,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
 
         binding.apply {
-
+            mapButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, MapActivity::class.java))
+            }
         }
     }
 }

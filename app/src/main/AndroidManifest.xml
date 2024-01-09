@@ -14,9 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HackathonStudy"
         tools:targetApi="31">
+        <activity
+            android:name=".OCRActivity"
+            android:exported="false" />
+
         <meta-data
             android:name="com.kakao.vectormap.APP_KEY"
-            android:value="@string/APP_KEY"/>
+            android:value="@string/APP_KEY" />
+
         <activity
             android:name=".MapActivity"
             android:exported="false" />

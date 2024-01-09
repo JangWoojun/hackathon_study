@@ -60,4 +60,7 @@ dependencies {
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 
     implementation("com.kakao.maps.open:android:2.6.0")
+
+    implementation ("com.google.mlkit:text-recognition-korean:16.0.0")
+
 }

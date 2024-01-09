@@ -61,6 +61,8 @@ dependencies {
 
     implementation("com.kakao.maps.open:android:2.6.0")
 
-    implementation ("com.google.mlkit:text-recognition-korean:16.0.0")
+    implementation("com.google.mlkit:text-recognition-korean:16.0.0")
+
+    implementation("com.otaliastudios:cameraview:2.7.2")
 
 }

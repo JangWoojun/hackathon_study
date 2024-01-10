@@ -20,6 +20,9 @@ class MainActivity : AppCompatActivity() {
             ocrButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, OCRActivity::class.java))
             }
+            blurButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, BlurActivity::class.java))
+            }
         }
     }
 }

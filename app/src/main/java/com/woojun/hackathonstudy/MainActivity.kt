@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity() {
             mapButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, MapActivity::class.java))
             }
+            ocrButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, OCRActivity::class.java))
+            }
         }
     }
 }

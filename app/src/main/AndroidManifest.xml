@@ -21,6 +21,9 @@
         android:theme="@style/Theme.HackathonStudy"
         tools:targetApi="31">
         <activity
+            android:name=".HWPActivity"
+            android:exported="false" />
+        <activity
             android:name=".BlurActivity"
             android:exported="false" />
         <activity

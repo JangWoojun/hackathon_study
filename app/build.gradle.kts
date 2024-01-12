@@ -65,4 +65,5 @@ dependencies {
 
     implementation("com.otaliastudios:cameraview:2.7.2")
 
+    implementation("kr.dogfoot:hwplib:1.1.4")
 }

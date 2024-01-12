@@ -17,6 +17,9 @@ class MainActivity : AppCompatActivity() {
             mapButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, MapActivity::class.java))
             }
+            cameraButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, CameraActivity::class.java))
+            }
             ocrButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, OCRActivity::class.java))
             }

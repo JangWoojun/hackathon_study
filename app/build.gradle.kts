@@ -66,4 +66,13 @@ dependencies {
     implementation("com.otaliastudios:cameraview:2.7.2")
 
     implementation("kr.dogfoot:hwplib:1.1.4")
+
+    val cameraxVersion = "1.1.0-beta01"
+    implementation("androidx.camera:camera-core:${cameraxVersion}")
+    implementation("androidx.camera:camera-camera2:${cameraxVersion}")
+    implementation("androidx.camera:camera-lifecycle:${cameraxVersion}")
+    implementation("androidx.camera:camera-video:${cameraxVersion}")
+
+    implementation("androidx.camera:camera-view:${cameraxVersion}")
+    implementation("androidx.camera:camera-extensions:${cameraxVersion}")
 }

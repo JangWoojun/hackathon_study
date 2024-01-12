@@ -23,6 +23,9 @@ class MainActivity : AppCompatActivity() {
             blurButton.setOnClickListener {
                 startActivity(Intent(this@MainActivity, BlurActivity::class.java))
             }
+            hwpButton.setOnClickListener {
+                startActivity(Intent(this@MainActivity, HWPActivity::class.java))
+            }
         }
     }
 }

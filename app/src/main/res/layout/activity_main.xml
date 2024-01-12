@@ -41,4 +41,12 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"/>
 
+    <Button
+        android:text="hwp"
+        android:textSize="50sp"
+        android:layout_weight="1"
+        android:id="@+id/hwp_button"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"/>
+
 </LinearLayout>

@@ -75,4 +75,7 @@ dependencies {
 
     implementation("androidx.camera:camera-view:${cameraxVersion}")
     implementation("androidx.camera:camera-extensions:${cameraxVersion}")
+
+    implementation("com.otaliastudios:cameraview:2.7.2")
+
 }

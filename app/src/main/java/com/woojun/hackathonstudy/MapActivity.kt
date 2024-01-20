@@ -37,6 +37,8 @@ class MapActivity : AppCompatActivity() {
     private lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
     private var kakaoMap: KakaoMap? = null
+    private var myLocation: Location? = null
+    private var isTracking = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,7 @@ class MapActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.apply {
+
             mLocationRequest =  LocationRequest.create().apply {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
             }
@@ -66,12 +69,35 @@ class MapActivity : AppCompatActivity() {
                         if (checkPermissionForLocation(this@MapActivity)) {
                             startLocationUpdates()
                         }
+
+                        myLocationButton.setOnClickListener {
+                            val trackingManager = kakaoMap.trackingManager
+
+                            if (!isTracking) {
+                                val styles = kakaoMap.labelManager!!
+                                    .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.human)))
+                                val options: LabelOptions =
+                                    LabelOptions.from(LatLng.from(myLocation!!.latitude, myLocation!!.longitude)).setStyles(styles)
+                                val layer = kakaoMap.labelManager!!.layer
+                                val label = layer!!.addLabel(options)
+
+                                trackingManager!!.startTracking(label)
+                                trackingManager.setTrackingRotation(true)
+
+                                Toast.makeText(this@MapActivity, "트래킹 모드", Toast.LENGTH_SHORT).show()
+                            } else {
+                                trackingManager!!.stopTracking()
+                                Toast.makeText(this@MapActivity, "트래킹 모드 해체", Toast.LENGTH_SHORT).show()
+                            }
+                            isTracking = !isTracking
+                        }
                     }
 
                     override fun getZoomLevel(): Int {
                         return 15
                     }
             })
+
         }
     }
 
@@ -95,6 +121,8 @@ class MapActivity : AppCompatActivity() {
     fun onLocationChanged(location: Location) {
         val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
         kakaoMap!!.moveCamera(cameraUpdate)
+
+        myLocation = location
 
         val styles = kakaoMap!!.labelManager!!
             .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.human)))

@@ -11,13 +11,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
+import com.google.android.gms.location.LocationServices
 import com.kakao.vectormap.KakaoMap
 import com.kakao.vectormap.KakaoMapReadyCallback
+import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
+import com.kakao.vectormap.camera.CameraUpdateFactory
 import com.woojun.hackathonstudy.databinding.ActivityMapBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -30,6 +32,8 @@ class MapActivity : AppCompatActivity() {
     private var mFusedLocationProviderClient: FusedLocationProviderClient? = null
     private lateinit var mLocationRequest: LocationRequest
     private val REQUEST_PERMISSION_LOCATION = 10
+    private var kakaoMap: KakaoMap? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMapBinding.inflate(layoutInflater)
@@ -38,10 +42,6 @@ class MapActivity : AppCompatActivity() {
         binding.apply {
             mLocationRequest =  LocationRequest.create().apply {
                 priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            }
-
-            if (checkPermissionForLocation(this@MapActivity)) {
-                startLocationUpdates()
             }
 
             mapView.start(object : MapLifeCycleCallback() {
@@ -57,10 +57,12 @@ class MapActivity : AppCompatActivity() {
                 },
                 object : KakaoMapReadyCallback() {
                     override fun onMapReady(kakaoMap: KakaoMap) {
-                        // 인증 후 API 가 정상적으로 실행될 때 호출됨
                         Log.d("확인", "정상 실행")
+                        this@MapActivity.kakaoMap = kakaoMap
+                        if (checkPermissionForLocation(this@MapActivity)) {
+                            startLocationUpdates()
+                        }
                     }
-
 
                     override fun getZoomLevel(): Int {
                         return 15
@@ -87,7 +89,9 @@ class MapActivity : AppCompatActivity() {
     }
 
     fun onLocationChanged(location: Location) {
-        Toast.makeText(this@MapActivity, "${location.latitude}, ${location.longitude}", Toast.LENGTH_SHORT).show()
+        val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
+        kakaoMap!!.moveCamera(cameraUpdate)
+        getMapResult(location.longitude.toString(), location.latitude.toString())
     }
 
 
@@ -112,6 +116,25 @@ class MapActivity : AppCompatActivity() {
         }
     }
 
+    private fun getMapResult(x: String, y: String) {
+        val retrofitAPI = RetrofitClient.getInstance().create(RetrofitAPI::class.java)
+        val call: Call<MapResult> = retrofitAPI.getMapResult(BuildConfig.REST_API_KEY,  "고등학교", x, y)
 
+        call.enqueue(object : Callback<MapResult> {
+            override fun onResponse(call: Call<MapResult>, response: Response<MapResult>) {
+                if (response.isSuccessful) {
+                    response.body()!!.documents.forEach {
+                        Toast.makeText(this@MapActivity, it.place_name, Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Log.d("확인", response.body().toString())
+                }
+            }
+
+            override fun onFailure(call: Call<MapResult>, t: Throwable) {
+                Toast.makeText(this@MapActivity, "지도를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
 }

@@ -95,6 +95,16 @@ class MapActivity : AppCompatActivity() {
     fun onLocationChanged(location: Location) {
         val cameraUpdate = CameraUpdateFactory.newCenterPosition(LatLng.from(location.latitude, location.longitude))
         kakaoMap!!.moveCamera(cameraUpdate)
+
+        val styles = kakaoMap!!.labelManager!!
+            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.human)))
+        val options: LabelOptions =
+            LabelOptions.from(LatLng.from(location.latitude, location.longitude)).setStyles(styles)
+        val layer = kakaoMap!!.labelManager!!.layer
+        val label = layer!!.addLabel(options)
+
+        label.show()
+
         getMapResult(location.longitude.toString(), location.latitude.toString())
     }
 
@@ -113,7 +123,6 @@ class MapActivity : AppCompatActivity() {
         if (requestCode == REQUEST_PERMISSION_LOCATION) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startLocationUpdates()
-
             } else {
                 Toast.makeText(this, "권한이 없어 지도를 사용할 수 없습니다.", Toast.LENGTH_SHORT).show()
             }
@@ -129,7 +138,7 @@ class MapActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()!!.documents.forEach {
                         val styles = kakaoMap!!.labelManager!!
-                            .addLabelStyles(LabelStyles.from(LabelStyle.from(com.woojun.hackathonstudy.R.drawable.backpack).setTextStyles(32, Color.BLACK,100, Color.WHITE)))
+                            .addLabelStyles(LabelStyles.from(LabelStyle.from(R.drawable.backpack).setTextStyles(32, Color.BLACK,100, Color.WHITE)))
                         val options: LabelOptions =
                             LabelOptions.from(LatLng.from(it.y.toDouble(), it.x.toDouble()))
                                 .setStyles(styles).setTexts(it.place_name)

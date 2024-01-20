@@ -3,6 +3,7 @@ package com.woojun.hackathonstudy
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
@@ -20,6 +21,9 @@ import com.kakao.vectormap.KakaoMapReadyCallback
 import com.kakao.vectormap.LatLng
 import com.kakao.vectormap.MapLifeCycleCallback
 import com.kakao.vectormap.camera.CameraUpdateFactory
+import com.kakao.vectormap.label.LabelOptions
+import com.kakao.vectormap.label.LabelStyle
+import com.kakao.vectormap.label.LabelStyles
 import com.woojun.hackathonstudy.databinding.ActivityMapBinding
 import retrofit2.Call
 import retrofit2.Callback
@@ -124,7 +128,16 @@ class MapActivity : AppCompatActivity() {
             override fun onResponse(call: Call<MapResult>, response: Response<MapResult>) {
                 if (response.isSuccessful) {
                     response.body()!!.documents.forEach {
-                        Toast.makeText(this@MapActivity, it.place_name, Toast.LENGTH_SHORT).show()
+                        val styles = kakaoMap!!.labelManager!!
+                            .addLabelStyles(LabelStyles.from(LabelStyle.from(com.woojun.hackathonstudy.R.drawable.backpack).setTextStyles(32, Color.BLACK,100, Color.WHITE)))
+                        val options: LabelOptions =
+                            LabelOptions.from(LatLng.from(it.y.toDouble(), it.x.toDouble()))
+                                .setStyles(styles).setTexts(it.place_name)
+
+                        val layer = kakaoMap!!.labelManager!!.layer
+                        val label = layer!!.addLabel(options)
+
+                        label.show()
                     }
                 } else {
                     Log.d("확인", response.body().toString())

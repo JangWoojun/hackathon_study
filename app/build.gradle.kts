@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
@@ -18,6 +19,8 @@ android {
 
     defaultConfig {
         resValue("string", "APP_KEY", APP_KEY)
+        buildConfigField("String", "REST_API_KEY", gradleLocalProperties(rootDir).getProperty("REST_API_KEY"))
+
 
         applicationId = "com.woojun.hackathonstudy"
         minSdk = 29
@@ -35,6 +38,9 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+        }
+        buildFeatures {
+            buildConfig = true
         }
     }
     compileOptions {
@@ -77,5 +83,6 @@ dependencies {
     implementation("androidx.camera:camera-extensions:${cameraxVersion}")
 
     implementation("com.otaliastudios:cameraview:2.7.2")
+
 
 }
